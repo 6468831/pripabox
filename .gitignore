@@ -1,0 +1,7 @@
+*.log
+.env
+env/
+# *.png
+# *.jpg
+__pycache__/
+virt-pripabox/

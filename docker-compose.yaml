@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  app:
+    build: modelcls
+    entrypoint: [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000" ]
+    ports: 
+      - "8000:8000"
+    restart: always
+
+  queues:
+    env_file:
+      - .env
+    build: modelcls
+    entrypoint: [ "python", "queues.py"]
+    restart: always
+# TODO: configure networks
+#    networks:
+#      - site_rabbitmq
+#
+#networks:
+#  site_rabbitmq:
+#    external: true
