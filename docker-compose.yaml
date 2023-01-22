@@ -10,7 +10,7 @@ services:
 
   queues:
     env_file:
-      - .env
+      - example.env
     build: modelcls
     entrypoint: [ "python", "queues.py"]
     restart: always
