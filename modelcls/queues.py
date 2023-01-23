@@ -10,7 +10,7 @@ from app import predict
 from logger import setup_logger
 
 logger = logging.getLogger("queues")
-print('!', PORT = int(os.getenv('RABBITMQ_PORT')))
+print('!', int(os.getenv('RABBITMQ_PORT')))
 USER = str(os.getenv('RABBITMQ_USER'))
 PASSWORD = str(os.getenv('RABBITMQ_PASSWORD'))
 HOST = str(os.getenv('RABBITMQ_HOST'))
