@@ -21,7 +21,6 @@ PRODUCE_QUEUE = str(os.getenv('RABBITMQ_PRODUCE_QUEUE'))
 credentials = pika.PlainCredentials(USER, PASSWORD)
 conn_params = pika.ConnectionParameters(host=HOST, port=PORT, credentials=credentials)
 
-
 def send_result(photo_id, label):
     logger.info('Start send result')
     connection = pika.BlockingConnection(conn_params)
@@ -33,11 +32,11 @@ def send_result(photo_id, label):
     logger.debug('Result data:', data)
     message = json.dumps(data)
     ch.basic_publish(exchange='',
-                     routing_key=PRODUCE_QUEUE,
-                     body=message,
-                     properties=pika.BasicProperties(
-                         delivery_mode=2,  # make message persistent
-                     ))
+                    routing_key=PRODUCE_QUEUE,
+                    body=message,
+                    properties=pika.BasicProperties(
+                        delivery_mode=2,  # make message persistent
+                    ))
     connection.close()
     logger.info('End send result')
 
