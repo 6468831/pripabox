@@ -1,5 +1,6 @@
 *.log
 env/
+db.sqlite3
 # *.png
 # *.jpg
 __pycache__/
