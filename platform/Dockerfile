@@ -5,7 +5,7 @@ EXPOSE 8000
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apt -y iputils-ping
+RUN apt -y install iputils-ping
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip --no-cache-dir install --upgrade pip & pip install -r /tmp/requirements.txt
