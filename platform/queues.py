@@ -72,7 +72,7 @@ for root, dirs, files in os.walk(path, topdown=False):
             data['photo_id'] = counter
 
             send_to_queue(data)
-            print(counter)
+            logger.debug(f"Data sent: image_id = {data['photo_id']}")
             counter += 1
 
 
@@ -85,15 +85,15 @@ def main(counter):
     def callback(ch, method, properties, body):
         try:
             data = json.loads(body)
-            logger.debug('Returned data:', data)
-            
-            # logger.debug('Predict label:', data)
-            # print('!', data['photo_id'], data['label'])
+            logger.debug(f"Returned data: {data['photo_id']}, {data['label']}")
             channel.basic_ack(delivery_tag=method.delivery_tag)
             print('!', type(data['photo_id']), type(data['label']))
             query_data = (None, data['label'])
             query = "INSERT INTO Photo VALUES(?, ?)"
             engine.execute(query, query_data)
+
+            # logger.debug('Data saved:', data['photo_id'], data['label'])
+            logger.debug(f"Data saved: {data['photo_id']}, {data['label']}")
             
         except Exception as e:
             logger.exception('Error', e)

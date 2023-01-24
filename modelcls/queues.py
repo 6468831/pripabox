@@ -18,8 +18,8 @@ USER = str(os.getenv('RABBITMQ_USER'))
 PASSWORD = str(os.getenv('RABBITMQ_PASSWORD'))
 HOST = str(os.getenv('RABBITMQ_HOST'))
 PORT = int(os.getenv('RABBITMQ_PORT'))
-CONSUME_QUEUE = str(os.getenv('RABBITMQ_CONSUME_QUEUE'))
-PRODUCE_QUEUE = str(os.getenv('RABBITMQ_PRODUCE_QUEUE'))
+CONSUME_QUEUE = str(os.getenv('RABBITMQ_CONSUME_QUEUE')) # to_ai
+PRODUCE_QUEUE = str(os.getenv('RABBITMQ_PRODUCE_QUEUE')) # from_ai
 
 credentials = pika.PlainCredentials(USER, PASSWORD)
 conn_params = pika.ConnectionParameters(host=HOST, port=PORT, credentials=credentials)
@@ -50,6 +50,7 @@ def send_result(photo_id, label):
 def main():
     connection = pika.BlockingConnection(conn_params)
     channel = connection.channel()
+
 
     def callback(ch, method, properties, body):
         try:
