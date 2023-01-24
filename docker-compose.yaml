@@ -1,19 +1,7 @@
 version: '3.5'
 
 services:
-  app:
-    build: modelcls
-    entrypoint: [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000" ]
-    ports: 
-      - "8000:8000"
-    restart: always
-
-  queues:
-    env_file:
-      - .env
-    build: modelcls
-    entrypoint: [ "python", "queues.py"]
-    restart: always
+  
     # networks:
     #   - site_rabbitmq
 
@@ -30,13 +18,16 @@ services:
     #   - site_rabbitmq
 
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:3.10
     container_name: 'rabbitmq'
     # volumes:
     #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
     #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     # networks:
     #   - site_rabbitmq
+
+
+
   # db:
   #   image: nouchka/sqlite3:latest
   #   ports:
