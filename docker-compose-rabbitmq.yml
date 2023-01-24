@@ -11,4 +11,4 @@ services:
       - site_rabbitmq
 
 networks:
-  site_rabbitmq
+  site_rabbitmq:
