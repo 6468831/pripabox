@@ -16,7 +16,7 @@ services:
     restart: always
 
   platform_queues:
-    volume:
+    volumes:
       - ./db.sqlite3:/src/db.sqlite3
     env_file:
       - .env
