@@ -33,7 +33,7 @@ conn_params = pika.ConnectionParameters(host=HOST, port=PORT, credentials=creden
 
 def send_to_queue(data):
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(conn_params)) # conn_params
+        pika.ConnectionParameters(HOST)) # conn_params
 
     channel = connection.channel()
     channel.queue_declare(queue=CONSUME_QUEUE)
