@@ -8,21 +8,10 @@ import pika
 
 from logger import setup_logger
 
-from fastapi import FastAPI
-app=FastAPI()
-
 from dotenv import load_dotenv
 load_dotenv()
 
 from db.base import engine
-
-@app.on_event('startup')
-async def startup():
-    engine.connect()
-
-@app.on_event('shutdown')
-async def shutdown():
-    await engine.disconnect()
 
 
 logger = logging.getLogger("queues")
