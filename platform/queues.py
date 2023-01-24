@@ -73,10 +73,11 @@ for root, dirs, files in os.walk(path, topdown=False):
 
             send_to_queue(data)
             logger.debug(f"Data sent: image_id = {data['photo_id']}")
+
             counter += 1
 
 
-def main(counter):
+def main(counter): # counter is used to know when to close rabbit connection
     connection = pika.BlockingConnection(conn_params)
     channel = connection.channel()
 
@@ -100,8 +101,8 @@ def main(counter):
             # https://stackoverflow.com/questions/24333840/rejecting-and-requeueing-a-rabbitmq-task-when-prefetch-count-1
             ch.basic_reject(delivery_tag=method.delivery_tag, requeue=True)
 
-        if counter - 1 == int(data['photo_id']):
-            channel.stop_consuming()
+        # if counter - 1 == int(data['photo_id']):
+        #     channel.stop_consuming()
 
 
     channel.basic_consume(queue=PRODUCE_QUEUE, on_message_callback=callback)
@@ -115,7 +116,7 @@ if __name__ == '__main__':
     try:
         setup_logger()
         main(counter)
-        # uvicorn.run("queues:app", port=8000, host='0.0.0.0', reload=True)
+        # uvicorn.run("platform:queues", port=8000, host='0.0.0.0', reload=True)
     except KeyboardInterrupt:
         print('Interrupted')
         sys.exit(0)
