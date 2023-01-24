@@ -12,4 +12,4 @@ services:
 
 networks:
   site_rabbitmq:
-    name:site_rabbitmq
+    name: site_rabbitmq
