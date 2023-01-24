@@ -21,7 +21,7 @@ HOST = str(os.getenv('RABBITMQ_HOST'))
 PORT = int(os.getenv('RABBITMQ_PORT'))
 CONSUME_QUEUE = str(os.getenv('RABBITMQ_CONSUME_QUEUE'))
 PRODUCE_QUEUE = str(os.getenv('RABBITMQ_PRODUCE_QUEUE'))
-print('!', USER, PASSWORD, HOST, PORT)
+
 credentials = pika.PlainCredentials(USER, PASSWORD)
 conn_params = pika.ConnectionParameters(host=HOST, port=PORT, credentials=credentials)
 

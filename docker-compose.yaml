@@ -14,8 +14,8 @@ services:
     build: modelcls
     entrypoint: [ "python", "queues.py"]
     restart: always
-    networks:
-      - site_rabbitmq
+    # networks:
+    #   - site_rabbitmq
 
 
   platform_queues:
@@ -26,10 +26,17 @@ services:
     build: platform
     entrypoint: [ "python", "queues.py"]
     restart: always
-    networks:
-      - site_rabbitmq
+    # networks:
+    #   - site_rabbitmq
 
-
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    # volumes:
+    #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+    #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    # networks:
+    #   - site_rabbitmq
   # db:
   #   image: nouchka/sqlite3:latest
   #   ports:
@@ -44,6 +51,6 @@ services:
 # TODO: configure networks
 
 
-networks:
-  site_rabbitmq:
-    external: true
+# networks:
+#   site_rabbitmq:
+#     external: true
