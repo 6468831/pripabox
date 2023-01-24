@@ -10,10 +10,22 @@ services:
 
   queues:
     env_file:
-      - example.env
+      - .env
     build: modelcls
     entrypoint: [ "python", "queues.py"]
     restart: always
+
+  db:
+    image: nouchka/sqlite3:latest
+    ports:
+      - 11111:1111
+    volumes:
+      - ./:/root/db/
+    stdin_open: true
+    tty: true
+    restart: always
+
+
 # TODO: configure networks
 #    networks:
 #      - site_rabbitmq

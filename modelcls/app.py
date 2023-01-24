@@ -66,7 +66,7 @@ def predict(image):
     # image = Image.open(image)
     image = prepare_image(image, target=(150, 150))
     preds = model.predict(image, batch_size=8)
-    print(preds)
+    # print(preds)
     category_index = preds.argmax(1).tolist()
     return get_label(category_index[0])
 

@@ -9,8 +9,11 @@ import pika
 from app import predict
 from logger import setup_logger
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
 logger = logging.getLogger("queues")
-print('!', int(os.getenv('RABBITMQ_PORT')))
 USER = str(os.getenv('RABBITMQ_USER'))
 PASSWORD = str(os.getenv('RABBITMQ_PASSWORD'))
 HOST = str(os.getenv('RABBITMQ_HOST'))
@@ -25,6 +28,9 @@ def send_result(photo_id, label):
     logger.info('Start send result')
     connection = pika.BlockingConnection(conn_params)
     ch = connection.channel()
+    
+    ch.queue_declare(queue=PRODUCE_QUEUE)
+    
     data = {
         "photo_id": photo_id,
         "label": label,
@@ -55,6 +61,7 @@ def main():
             logger.debug('Predict label:', data)
             send_result(data['photo_id'], label)
             ch.basic_ack(delivery_tag=method.delivery_tag)
+            
 
         except Exception as e:
             logger.exception('Error', e)
