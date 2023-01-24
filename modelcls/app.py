@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 import numpy as np
 import pandas as pd
-from tensorflow.keras.utils import img_to_array
+from keras.utils import img_to_array
 from keras.models import load_model
 import uvicorn 
 from PIL import Image
