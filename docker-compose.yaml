@@ -25,7 +25,7 @@ services:
   db:
     image: nouchka/sqlite3:latest
     ports:
-      - 11111:1111
+      - 9000:9000
     volumes:
       - ./:/root/db/
     stdin_open: true
