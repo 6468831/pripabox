@@ -1,9 +1,21 @@
 version: '3.5'
 
 services:
-  
-    # networks:
-    #   - site_rabbitmq
+  app:
+    build: modelcls
+    entrypoint: [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000" ]
+    ports: 
+      - "8000:8000"
+    restart: always
+
+  queues:
+    env_file:
+      - .env
+    build: modelcls
+    entrypoint: [ "python", "queues.py"]
+    restart: always
+    networks:
+      - site_rabbitmq
 
 
   platform_queues:
@@ -14,37 +26,11 @@ services:
     build: platform
     entrypoint: [ "python", "queues.py"]
     restart: always
-    # networks:
-    #   - site_rabbitmq
+    networks:
+      - site_rabbitmq
 
-  rabbitmq:
-    image: rabbitmq:3.10
-    container_name: 'rabbitmq'
-    environment:
-      RABBITMQ_DEFAULT_USER: rabbitmq
-      RABBITMQ_DEFAULT_PASS: pass
-    # volumes:
-    #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-    #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    # networks:
-    #   - site_rabbitmq
+  
 
-
-
-  # db:
-  #   image: nouchka/sqlite3:latest
-  #   ports:
-  #     - 9000:9000
-  #   volumes:
-  #     - ./:/root/db/
-  #   stdin_open: true
-  #   tty: true
-  #   restart: always
-
-
-# TODO: configure networks
-
-
-# networks:
-#   site_rabbitmq:
-#     external: true
+networks:
+  site_rabbitmq:
+    external: true
