@@ -15,6 +15,13 @@ services:
     entrypoint: [ "python", "queues.py"]
     restart: always
 
+  platform_queues:
+    env_file:
+      - .env
+    build: platform
+    entrypoint: [ "python", "queues.py"]
+    restart: always
+
   db:
     image: nouchka/sqlite3:latest
     ports:
