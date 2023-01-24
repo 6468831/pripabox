@@ -14,6 +14,10 @@ load_dotenv()
 from db.base import engine
 
 
+hostname = "rabbitmq" #example
+response = os.system("ping -c 1 " + hostname)
+print('!', response)
+
 logger = logging.getLogger("queues")
 USER = str(os.getenv('RABBITMQ_USER'))
 PASSWORD = str(os.getenv('RABBITMQ_PASSWORD'))
