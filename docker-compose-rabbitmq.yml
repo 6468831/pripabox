@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   rabbitmq:
@@ -9,6 +9,7 @@ services:
     #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
       - site_rabbitmq
+
 
 networks:
   site_rabbitmq:
