@@ -16,21 +16,23 @@ services:
     restart: always
 
   platform_queues:
+    volume:
+      - ./db.sqlite3:/src/db.sqlite3
     env_file:
       - .env
     build: platform
     entrypoint: [ "python", "queues.py"]
     restart: always
 
-  db:
-    image: nouchka/sqlite3:latest
-    ports:
-      - 9000:9000
-    volumes:
-      - ./:/root/db/
-    stdin_open: true
-    tty: true
-    restart: always
+  # db:
+  #   image: nouchka/sqlite3:latest
+  #   ports:
+  #     - 9000:9000
+  #   volumes:
+  #     - ./:/root/db/
+  #   stdin_open: true
+  #   tty: true
+  #   restart: always
 
 
 # TODO: configure networks
