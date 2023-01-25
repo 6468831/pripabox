@@ -1,33 +1,20 @@
-# pripabox-ModelCLS
-
-
-Url for prediction:  http://127.0.0.1:8000/predict
-
-Method: **Post**
-
- request.py
-A script is given for the post request, which takes as an parameter a **.png** or **.jpg** file. Any other extension is not accepted. 
+Platform app sends base64 representations of images 
+from /platform/images folder to a queue, receives 
+back their labels and saves them to a database.
 
 
 ## Docker
 
 ```
 cd existing_repo
-docker-compose up
+docker-compose -f docker-compose-rabbitmq.yml up -d
+docker-compose up -d
 ```
 
-## Queue
+wait a few seconds for the app to trully load 
+and check container logs
 
-A docker compose service "queues" run a script, that consume requests and send results by rabbitmq queues.
-
-Script params should be placed in `.env` file (can be specified in docker-compose config) or in `docker-compose.yaml` directly.
-
-```lombok.config
-RABBITMQ_USER=user
-RABBITMQ_PASSWORD=password
-RABBITMQ_HOST=localhost
-RABBITMQ_PORT=5672
-
-RABBITMQ_CONSUME_QUEUE=to_ai
-RABBITMQ_PRODUCE_QUEUE=from_ai
 ```
+docker logs pripabox_platform_queues_1
+```
+
