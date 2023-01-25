@@ -63,10 +63,9 @@ def get_images():
                 send_to_queue(data)
                 logger.debug(f"Data sent: image_id = {data['photo_id']}")
                 counter += 1
-    return counter
 
 
-def main(counter): # counter is used to know when to close rabbit connection
+def main():
     connection = pika.BlockingConnection(conn_params)
     channel = connection.channel()
 
@@ -88,9 +87,6 @@ def main(counter): # counter is used to know when to close rabbit connection
             # https://stackoverflow.com/questions/24333840/rejecting-and-requeueing-a-rabbitmq-task-when-prefetch-count-1
             ch.basic_reject(delivery_tag=method.delivery_tag, requeue=True)
 
-        # if counter - 1 == int(data['photo_id']):
-        #     channel.stop_consuming()
-
 
     channel.basic_consume(queue=PRODUCE_QUEUE, on_message_callback=callback)
 
@@ -102,7 +98,7 @@ def main(counter): # counter is used to know when to close rabbit connection
 if __name__ == '__main__':
     try:
         setup_logger()
-        main(counter=get_images())
+        main()
     except KeyboardInterrupt:
         print('Interrupted')
         sys.exit(0)
