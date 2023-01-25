@@ -88,8 +88,8 @@ def main(counter): # counter is used to know when to close rabbit connection
             # https://stackoverflow.com/questions/24333840/rejecting-and-requeueing-a-rabbitmq-task-when-prefetch-count-1
             ch.basic_reject(delivery_tag=method.delivery_tag, requeue=True)
 
-        if counter - 1 == int(data['photo_id']):
-            channel.stop_consuming()
+        # if counter - 1 == int(data['photo_id']):
+        #     channel.stop_consuming()
 
 
     channel.basic_consume(queue=PRODUCE_QUEUE, on_message_callback=callback)
