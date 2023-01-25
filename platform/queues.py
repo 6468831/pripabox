@@ -14,10 +14,6 @@ load_dotenv()
 from db.base import engine
 
 
-hostname = "rabbitmq" #example
-response = os.system("ping -c 1 " + hostname)
-print('!', response)
-
 logger = logging.getLogger("queues")
 USER = str(os.getenv('RABBITMQ_USER'))
 PASSWORD = str(os.getenv('RABBITMQ_PASSWORD'))
@@ -48,25 +44,26 @@ def send_to_queue(data):
 
     print(f" [x] sent file {data['photo_id']} to queue")
 
-    connection.close() # do we close it every time?
+    connection.close()
 
 
 path = 'images/'
 data = {}
 
-for root, dirs, files in os.walk(path, topdown=False):
-    counter = 0
-    for name in files:
-        with open(os.path.join(root, name,), 'rb') as f:
-            
-            img_b64 = base64.b64encode(f.read()).decode("utf-8")
-            data['image'] = img_b64
-            data['photo_id'] = counter
+def get_images():
+    for root, dirs, files in os.walk(path, topdown=False):
+        counter = 0
+        for name in files:
+            with open(os.path.join(root, name,), 'rb') as f:
+                
+                img_b64 = base64.b64encode(f.read()).decode("utf-8")
+                data['image'] = img_b64
+                data['photo_id'] = counter
 
-            send_to_queue(data)
-            logger.debug(f"Data sent: image_id = {data['photo_id']}")
-
-            counter += 1
+                send_to_queue(data)
+                logger.debug(f"Data sent: image_id = {data['photo_id']}")
+                counter += 1
+    return counter
 
 
 def main(counter): # counter is used to know when to close rabbit connection
@@ -80,12 +77,10 @@ def main(counter): # counter is used to know when to close rabbit connection
             data = json.loads(body)
             logger.debug(f"Returned data: {data['photo_id']}, {data['label']}")
             channel.basic_ack(delivery_tag=method.delivery_tag)
-            print('!', type(data['photo_id']), type(data['label']))
             query_data = (None, data['label'])
             query = "INSERT INTO Photo VALUES(?, ?)"
             engine.execute(query, query_data)
 
-            # logger.debug('Data saved:', data['photo_id'], data['label'])
             logger.debug(f"Data saved: {data['photo_id']}, {data['label']}")
             
         except Exception as e:
@@ -93,8 +88,8 @@ def main(counter): # counter is used to know when to close rabbit connection
             # https://stackoverflow.com/questions/24333840/rejecting-and-requeueing-a-rabbitmq-task-when-prefetch-count-1
             ch.basic_reject(delivery_tag=method.delivery_tag, requeue=True)
 
-        # if counter - 1 == int(data['photo_id']):
-        #     channel.stop_consuming()
+        if counter - 1 == int(data['photo_id']):
+            channel.stop_consuming()
 
 
     channel.basic_consume(queue=PRODUCE_QUEUE, on_message_callback=callback)
@@ -107,8 +102,7 @@ def main(counter): # counter is used to know when to close rabbit connection
 if __name__ == '__main__':
     try:
         setup_logger()
-        main(counter)
-        # uvicorn.run("platform:queues", port=8000, host='0.0.0.0', reload=True)
+        main(counter=get_images())
     except KeyboardInterrupt:
         print('Interrupted')
         sys.exit(0)
